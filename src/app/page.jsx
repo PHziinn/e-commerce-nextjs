@@ -4,10 +4,12 @@ import NavBarHeader from './components/navBarHeader';
 import { Box, Container, Grid, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
+import { useState, useEffect } from 'react';
 
 export default function Home() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const [cartItems, setCartItems] = useState([]);
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ['products'],
@@ -17,6 +19,34 @@ export default function Home() {
     },
   });
 
+  useEffect(() => {
+    const storedCartItems = localStorage.getItem('products');
+
+    if (storedCartItems) {
+      try {
+        const parsedCartItems = JSON.parse(storedCartItems);
+
+        setCartItems(parsedCartItems);
+      } catch (error) {
+        console.error('Erro ao analisar itens do carrinho do localStorage:', error);
+      }
+    }
+  }, []);
+
+  const handleAddItem = (newItem) => {
+    setCartItems((prevCartItems) => [...prevCartItems, { ...newItem, quantity: 1 }]);
+
+    localStorage.setItem('products', JSON.stringify(cartItems));
+  };
+
+  const handleRemoveItem = (index) => {
+    const updatedCartItems = [...cartItems];
+    updatedCartItems.splice(index, 1);
+    setCartItems(updatedCartItems);
+
+    localStorage.setItem('products', JSON.stringify(updatedCartItems));
+  };
+
   return (
     <Container
       maxWidth={false}
@@ -25,7 +55,10 @@ export default function Home() {
         paddingX: isMobile ? 0 : undefined,
       }}>
       <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: isMobile ? 15 : '10rem' }}>
-        <NavBarHeader />
+        <NavBarHeader
+          cartItems={cartItems}
+          onRemoveItem={handleRemoveItem}
+        />
 
         <Grid
           container
@@ -41,7 +74,10 @@ export default function Home() {
               sm={6}
               md={3.5}
               lg={2.2}>
-              <CardsProdutos produtoData={produto} />
+              <CardsProdutos
+                onAddItem={handleAddItem}
+                produtoData={produto}
+              />
             </Grid>
           ))}
         </Grid>

@@ -3,11 +3,15 @@ import { Box, Button, Grid, Rating, Typography, useMediaQuery, useTheme } from '
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { useConvertValues } from '@/hooks/useConvertValues';
 
-export default function CardsProdutos({ produtoData }) {
+export default function CardsProdutos({ produtoData, onAddItem }) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const { convertValues } = useConvertValues();
+
+  const handleAddToCart = () => {
+    onAddItem(produtoData);
+  };
 
   return (
     <Grid
@@ -87,8 +91,8 @@ export default function CardsProdutos({ produtoData }) {
 
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <Button
-            href="#"
             variant="contained"
+            onClick={handleAddToCart}
             sx={{
               boxShadow: 'none',
               background: 'black',
