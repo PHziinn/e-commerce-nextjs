@@ -1,7 +1,15 @@
 'use client';
 import CardsProdutos from './components/cardsProdutos';
 import NavBarHeader from './components/navBarHeader';
-import { Box, Container, Grid, Typography, useMediaQuery, useTheme } from '@mui/material';
+import {
+  Box,
+  Container,
+  Grid,
+  Typography,
+  useMediaQuery,
+  useTheme,
+  CircularProgress,
+} from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
@@ -64,7 +72,7 @@ export default function Home() {
           container
           spacing={1}
           sx={{ display: 'flex', justifyContent: isMobile ? 'center' : 'flex-start' }}>
-          {isLoading && <Typography variant="body1">Carregando produtos...</Typography>}
+          {isLoading && <CircularProgress sx={{ margin: 'auto' }} />}
           {isError && <Typography variant="body1">Erro ao carregar produtos</Typography>}
           {data?.map((produto) => (
             <Grid
