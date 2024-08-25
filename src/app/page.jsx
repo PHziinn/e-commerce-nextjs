@@ -13,6 +13,7 @@ import {
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
+import { Footer } from './components/footer';
 
 export default function Home() {
   const theme = useTheme();
@@ -56,40 +57,43 @@ export default function Home() {
   };
 
   return (
-    <Container
-      maxWidth={false}
-      sx={{
-        maxWidth: isMobile ? '95vw' : '80vw',
-        paddingX: isMobile ? 0 : undefined,
-      }}>
-      <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: isMobile ? 15 : '10rem' }}>
-        <NavBarHeader
-          cartItems={cartItems}
-          onRemoveItem={handleRemoveItem}
-        />
+    <>
+      <Container
+        maxWidth={false}
+        sx={{
+          maxWidth: isMobile ? '95vw' : '80vw',
+          paddingX: isMobile ? 0 : undefined,
+        }}>
+        <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: isMobile ? 15 : '10rem' }}>
+          <NavBarHeader
+            cartItems={cartItems}
+            onRemoveItem={handleRemoveItem}
+          />
 
-        <Grid
-          container
-          spacing={1}
-          sx={{ display: 'flex', justifyContent: isMobile ? 'center' : 'flex-start' }}>
-          {isLoading && <CircularProgress sx={{ margin: 'auto' }} />}
-          {isError && <Typography variant="body1">Erro ao carregar produtos</Typography>}
-          {data?.map((produto) => (
-            <Grid
-              item
-              key={produto.id}
-              sx={{ margin: 1 }}
-              sm={6}
-              md={3.5}
-              lg={2.2}>
-              <CardsProdutos
-                onAddItem={handleAddItem}
-                produtoData={produto}
-              />
-            </Grid>
-          ))}
-        </Grid>
-      </Box>
-    </Container>
+          <Grid
+            container
+            spacing={1}
+            sx={{ display: 'flex', justifyContent: isMobile ? 'center' : 'flex-start' }}>
+            {isLoading && <CircularProgress sx={{ margin: 'auto' }} />}
+            {isError && <Typography variant="body1">Erro ao carregar produtos</Typography>}
+            {data?.map((produto) => (
+              <Grid
+                item
+                key={produto.id}
+                sx={{ margin: 1 }}
+                sm={6}
+                md={3.5}
+                lg={2.2}>
+                <CardsProdutos
+                  onAddItem={handleAddItem}
+                  produtoData={produto}
+                />
+              </Grid>
+            ))}
+          </Grid>
+        </Box>
+      </Container>
+      {!isLoading && !isError && <Footer />}
+    </>
   );
 }
