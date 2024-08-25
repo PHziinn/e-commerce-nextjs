@@ -2,9 +2,10 @@
 import { Box, Button, Grid, Rating, Typography, useMediaQuery, useTheme } from '@mui/material';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
-export default function CardsProdutos() {
+export default function CardsProdutos({ produtoData }) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
   return (
     <Grid
       item
@@ -32,9 +33,9 @@ export default function CardsProdutos() {
           }}>
           <Box
             component={'img'}
-            src={'https://fakestoreapi.com/img/71-3HjGNDUL._AC_SY879._SX._UX._SY._UY_.jpg'}
-            alt={'Camisa Branca'}
-            style={{ width: '80%', marginBottom: '16px' }}
+            src={produtoData.image}
+            alt={produtoData.image}
+            sx={{ width: '100%', height: '200px', objectFit: 'contain', marginBottom: '16px' }}
           />
         </Box>
 
@@ -52,13 +53,13 @@ export default function CardsProdutos() {
             lineHeight: '1.4em',
             maxHeight: '3.4em',
           }}>
-          Mens Casual Premium Slim Fit T-Shirts
+          {produtoData.description}
         </Typography>
 
         <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
           <Rating
             name="read-only"
-            value={2}
+            value={produtoData.rating.rate}
             precision={0.1}
             readOnly
             size="small"
@@ -66,20 +67,14 @@ export default function CardsProdutos() {
           <Typography
             variant="body2"
             sx={{ ml: 1, color: '#FFA400', fontSize: '15px' }}>
-            {2}/5
+            {produtoData.rating.rate}/5
           </Typography>
         </Box>
 
         <Typography
-          variant="body2"
-          sx={{ textDecoration: 'line-through', color: 'gray' }}>
-          R$ 255,00
-        </Typography>
-
-        <Typography
           variant="h6"
           sx={{ fontWeight: 'bold', mb: 1 }}>
-          R$ 123,99
+          R$ {produtoData.price}
           <Typography
             component={'p'}
             sx={{ fontSize: 13, fontWeight: 'lighter', mb: 1 }}>

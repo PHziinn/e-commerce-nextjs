@@ -1,11 +1,21 @@
 'use client';
 import CardsProdutos from './components/cardsProdutos';
 import NavBarHeader from './components/navBarHeader';
-import { Box, Container, Grid, useMediaQuery, useTheme } from '@mui/material';
+import { Box, Container, Grid, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 
 export default function Home() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ['products'],
+    queryFn: async () => {
+      const response = await axios.get('https://fakestoreapi.com/products');
+      return response.data;
+    },
+  });
 
   return (
     <Container
@@ -21,15 +31,17 @@ export default function Home() {
           container
           spacing={1}
           sx={{ display: 'flex', justifyContent: isMobile ? 'center' : 'flex-start' }}>
-          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((item) => (
+          {isLoading && <Typography variant="body1">Carregando produtos...</Typography>}
+          {isError && <Typography variant="body1">Erro ao carregar produtos</Typography>}
+          {data?.map((produto) => (
             <Grid
               item
+              key={produto.id}
               sx={{ margin: 1 }}
               sm={6}
               md={3.5}
-              lg={2.2}
-              key={item}>
-              <CardsProdutos />
+              lg={2.2}>
+              <CardsProdutos produtoData={produto} />
             </Grid>
           ))}
         </Grid>
