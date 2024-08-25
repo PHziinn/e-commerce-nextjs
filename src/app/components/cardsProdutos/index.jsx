@@ -1,10 +1,13 @@
 'use client';
 import { Box, Button, Grid, Rating, Typography, useMediaQuery, useTheme } from '@mui/material';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import { useConvertValues } from '@/hooks/useConvertValues';
 
 export default function CardsProdutos({ produtoData }) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
+  const { convertValues } = useConvertValues();
 
   return (
     <Grid
@@ -74,7 +77,7 @@ export default function CardsProdutos({ produtoData }) {
         <Typography
           variant="h6"
           sx={{ fontWeight: 'bold', mb: 1 }}>
-          R$ {produtoData.price}
+          {convertValues(produtoData.price)}
           <Typography
             component={'p'}
             sx={{ fontSize: 13, fontWeight: 'lighter', mb: 1 }}>
